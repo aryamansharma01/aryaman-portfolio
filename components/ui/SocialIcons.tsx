@@ -1,4 +1,5 @@
-import { Mail, GraduationCap } from "lucide-react";
+import { Check, FileText, GraduationCap, Mail } from "lucide-react";
+import { EmailLink } from "@/components/ui/EmailLink";
 import { socials } from "@/data/socials";
 import { cn } from "@/lib/utils";
 
@@ -22,24 +23,31 @@ const links = [
   { href: socials.github, label: "GitHub", icon: GithubIcon },
   { href: socials.linkedin, label: "LinkedIn", icon: LinkedinIcon },
   { href: socials.scholar, label: "Google Scholar", icon: GraduationCap },
-  { href: socials.email, label: "Email", icon: Mail },
+  { href: socials.resume, label: "Resume", icon: FileText },
 ];
+
+const iconClass =
+  "flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted transition-colors hover:border-accent hover:text-accent";
 
 export function SocialIcons({ className }: { className?: string }) {
   return (
-    <div className={cn("flex items-center gap-3", className)}>
+    <div className={cn("flex items-center gap-2.5", className)}>
       {links.map(({ href, label, icon: Icon }) => (
         <a
           key={label}
           href={href}
-          target={href.startsWith("mailto:") ? undefined : "_blank"}
+          target="_blank"
           rel="noreferrer"
           aria-label={label}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted transition-colors hover:border-accent-cyan hover:text-accent-cyan"
+          title={label}
+          className={iconClass}
         >
           <Icon size={16} />
         </a>
       ))}
+      <EmailLink className={iconClass} copiedChildren={<Check size={16} />}>
+        <Mail size={16} />
+      </EmailLink>
     </div>
   );
 }

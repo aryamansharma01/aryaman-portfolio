@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatMonthYear(iso: string): string {
   const date = new Date(iso);
-  return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+  return date.toLocaleDateString("en-US", { month: "short", year: "numeric", timeZone: "UTC" });
 }
 
 export function formatDateRange(start: string, end: string, presentIfFuture = false): string {

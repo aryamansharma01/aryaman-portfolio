@@ -1,41 +1,50 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, NotebookPen } from "lucide-react";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { BlogList } from "@/components/blog/BlogList";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { getAllPostsMeta } from "@/lib/posts";
 
+const description = "Notes on ML systems, agents, and everything in between.";
+
 export const metadata: Metadata = {
-  title: "Blog — Aryaman Sharma",
-  description: "Notes on ML systems, agents, and everything in between.",
+  title: "Blog",
+  description,
 };
 
 export default function BlogPage() {
   const posts = getAllPostsMeta();
 
   return (
-    <div className="mx-auto min-h-[70vh] max-w-4xl px-6 py-20">
-      <Link
-        href="/#blog"
-        className="mb-8 inline-flex items-center gap-2 font-mono text-sm text-muted hover:text-accent-cyan"
-      >
-        <ArrowLeft size={14} />
-        Back home
-      </Link>
-      <h1 className="text-3xl font-semibold text-foreground">Blog</h1>
-      <p className="mt-2 text-muted">Notes on ML systems, agents, and everything in between.</p>
+    <>
+      <PageHeader title="Blog" description={description} />
 
-      <div className="mt-10">
-        {posts.length === 0 ? (
-          <EmptyState
-            icon={<NotebookPen size={20} />}
-            title="Under construction"
-            description="No posts yet — writing is in progress. Check back soon."
-          />
-        ) : (
-          <BlogList posts={posts} />
-        )}
-      </div>
-    </div>
+      {posts.length === 0 ? (
+        <p className="border-t border-border pt-6 text-muted">
+          No posts yet — writing is in progress. Check back soon.
+        </p>
+      ) : (
+        <ul>
+          {posts.map((post) => (
+            <li key={post.slug} className="border-t border-border">
+              <Link
+                href={`/blog/${post.slug}`}
+                className="group grid gap-x-6 gap-y-1 py-4 sm:grid-cols-[9.5rem_1fr]"
+              >
+                <time dateTime={post.date} className="pt-0.5 font-mono text-xs text-muted">
+                  {post.date}
+                </time>
+                <span>
+                  <span className="font-medium text-foreground transition-colors group-hover:text-accent">
+                    {post.title}
+                  </span>
+                  {post.excerpt && (
+                    <span className="mt-1 block text-sm text-muted">{post.excerpt}</span>
+                  )}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
   );
 }

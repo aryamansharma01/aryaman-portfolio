@@ -16,7 +16,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) return {};
-  return { title: `${post.title} — Aryaman Sharma`, description: post.excerpt };
+  return { title: post.title, description: post.excerpt };
 }
 
 export default async function BlogPostPage({
@@ -29,18 +29,22 @@ export default async function BlogPostPage({
   if (!post) notFound();
 
   return (
-    <article className="mx-auto min-h-[70vh] max-w-3xl px-6 py-20">
+    <article>
       <Link
         href="/blog"
-        className="mb-8 inline-flex items-center gap-2 font-mono text-sm text-muted hover:text-accent-cyan"
+        className="mb-8 inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-accent"
       >
         <ArrowLeft size={14} />
-        All posts
+        all posts
       </Link>
-      <p className="font-mono text-xs text-accent-cyan">{post.date}</p>
-      <h1 className="mt-2 text-3xl font-semibold text-foreground">{post.title}</h1>
+      <time dateTime={post.date} className="block font-mono text-xs text-muted">
+        {post.date}
+      </time>
+      <h1 className="mt-2 font-serif text-4xl font-medium tracking-tight text-foreground">
+        {post.title}
+      </h1>
       <div
-        className="prose prose-invert mt-8 max-w-none"
+        className="prose mt-8 max-w-none"
         dangerouslySetInnerHTML={{ __html: post.contentHtml }}
       />
     </article>

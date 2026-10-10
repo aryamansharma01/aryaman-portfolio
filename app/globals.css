@@ -1,72 +1,147 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-:root {
-  --background: #05070f;
-  --surface: #0f1424;
-  --surface-hover: #151b30;
-  --border-color: #1a2138;
-  --foreground: #f5f7fa;
-  --muted: #94a3b8;
-  --accent-blue: #2f6bff;
-  --accent-cyan: #22d3ee;
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --background: #faf8f4;
+  --surface: #f1eee7;
+  --border-color: #e4dfd4;
+  --foreground: #1c1b19;
+  --muted: #6b675f;
+  --accent: #1f4fd8;
+  --code-keyword: #a626a4;
+  --code-string: #3d7a37;
+  --code-number: #986801;
+  --code-title: #1f4fd8;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #111214;
+  --surface: #1a1c1f;
+  --border-color: #2a2d32;
+  --foreground: #ecebe7;
+  --muted: #9a988f;
+  --accent: #8aa9ff;
+  --code-keyword: #c792ea;
+  --code-string: #a5d6a7;
+  --code-number: #f2c27b;
+  --code-title: #8aa9ff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
-  --color-surface-hover: var(--surface-hover);
   --color-border: var(--border-color);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
-  --color-accent-blue: var(--accent-blue);
-  --color-accent-cyan: var(--accent-cyan);
+  --color-accent: var(--accent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-newsreader);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
 }
 
-@layer utilities {
-  .glass {
-    background-color: rgb(255 255 255 / 0.05);
-    border: 1px solid rgb(255 255 255 / 0.1);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-  }
+::selection {
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
+}
 
-  .glow-blue {
-    box-shadow: 0 0 40px -10px var(--accent-blue);
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
   }
-
-  .glow-cyan {
-    box-shadow: 0 0 40px -10px var(--accent-cyan);
-  }
-
-  .text-gradient {
-    background-image: linear-gradient(to right, var(--accent-blue), var(--accent-cyan));
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
-.prose-invert {
-  --tw-prose-body: var(--muted);
+@utility fade-up {
+  animation: fade-up 0.5s ease-out both;
+}
+
+/* Underline that draws in from the left on hover. */
+@utility link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition:
+    background-size 0.25s ease,
+    color 0.2s ease;
+
+  &:hover,
+  &[aria-current="page"] {
+    background-size: 100% 1px;
+  }
+}
+
+.prose {
+  --tw-prose-body: var(--foreground);
   --tw-prose-headings: var(--foreground);
-  --tw-prose-links: var(--accent-cyan);
+  --tw-prose-lead: var(--muted);
+  --tw-prose-links: var(--accent);
   --tw-prose-bold: var(--foreground);
-  --tw-prose-code: var(--accent-cyan);
+  --tw-prose-counters: var(--muted);
+  --tw-prose-bullets: var(--muted);
+  --tw-prose-hr: var(--border-color);
   --tw-prose-quotes: var(--foreground);
   --tw-prose-quote-borders: var(--border-color);
-  --tw-prose-hr: var(--border-color);
-  --tw-prose-bullets: var(--accent-blue);
-  --tw-prose-pre-bg: var(--surface);
+  --tw-prose-captions: var(--muted);
+  --tw-prose-code: var(--foreground);
   --tw-prose-pre-code: var(--foreground);
+  --tw-prose-pre-bg: var(--surface);
+  --tw-prose-th-borders: var(--border-color);
+  --tw-prose-td-borders: var(--border-color);
+}
+
+.prose pre {
+  border: 1px solid var(--border-color);
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-built_in,
+.hljs-type {
+  color: var(--code-keyword);
+}
+
+.hljs-string,
+.hljs-attr,
+.hljs-regexp,
+.hljs-addition {
+  color: var(--code-string);
+}
+
+.hljs-number,
+.hljs-literal,
+.hljs-symbol,
+.hljs-variable {
+  color: var(--code-number);
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-name,
+.hljs-meta {
+  color: var(--code-title);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -76,10 +151,5 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
-}
-
-html {
-  scroll-behavior: smooth;
 }

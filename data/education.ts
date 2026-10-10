@@ -17,7 +17,7 @@ export const education: EducationEntry[] = [
     location: "Pittsburgh, PA",
     start: "2026-08-01",
     end: "2028-05-31",
-    highlights: ["Incoming graduate student"],
+    highlights: ["4.33 GPA"],
   },
   {
     id: "nsit",

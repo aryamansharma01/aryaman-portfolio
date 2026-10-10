@@ -11,6 +11,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: siteConfig.url, lastModified: new Date() },
     { url: `${siteConfig.url}/blog`, lastModified: new Date() },
+    { url: `${siteConfig.url}/publications`, lastModified: new Date() },
+    { url: `${siteConfig.url}/projects`, lastModified: new Date() },
     ...postEntries,
   ];
 }
