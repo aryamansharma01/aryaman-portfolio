@@ -4,7 +4,9 @@ import matter from "gray-matter";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 import remarkRehype from "remark-rehype";
+import rehypeKatex from "rehype-katex";
 import rehypeHighlight from "rehype-highlight";
 import rehypeStringify from "rehype-stringify";
 
@@ -19,6 +21,34 @@ export interface PostMeta {
 
 export interface Post extends PostMeta {
   contentHtml: string;
+}
+
+interface HtmlNode {
+  type: string;
+  tagName?: string;
+  properties?: Record<string, unknown>;
+  children?: HtmlNode[];
+}
+
+// Lets posts embed a video with image syntax: ![caption](/path/to/clip.mp4)
+function rehypeVideo() {
+  const visit = (node: HtmlNode) => {
+    const src = node.properties?.src;
+    if (node.tagName === "img" && typeof src === "string" && /\.(mp4|webm)$/.test(src)) {
+      node.tagName = "video";
+      node.properties = {
+        src,
+        ariaLabel: node.properties?.alt,
+        autoPlay: true,
+        loop: true,
+        muted: true,
+        playsInline: true,
+        disablePictureInPicture: true,
+      };
+    }
+    node.children?.forEach(visit);
+  };
+  return visit;
 }
 
 function listMarkdownFiles(): string[] {
@@ -60,7 +90,10 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   const processed = await unified()
     .use(remarkParse)
     .use(remarkGfm)
+    .use(remarkMath)
     .use(remarkRehype)
+    .use(rehypeVideo)
+    .use(rehypeKatex)
     .use(rehypeHighlight)
     .use(rehypeStringify)
     .process(content);

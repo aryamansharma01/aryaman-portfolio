@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { getAllPostSlugs, getPostBySlug } from "@/lib/posts";
+import "katex/dist/katex.min.css";
 
 export function generateStaticParams() {
   return getAllPostSlugs().map((slug) => ({ slug }));
