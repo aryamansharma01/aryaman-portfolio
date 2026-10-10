@@ -40,7 +40,7 @@ export default async function BlogPostPage({
       <time dateTime={post.date} className="block font-mono text-xs text-muted">
         {post.date}
       </time>
-      <h1 className="mt-2 font-serif text-4xl font-medium tracking-tight text-foreground">
+      <h1 className="mt-2 font-serif text-4xl font-medium italic tracking-tight text-foreground">
         {post.title}
       </h1>
       <div
