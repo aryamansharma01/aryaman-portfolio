@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowUpRight } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { publications } from "@/data/publications";
 
@@ -29,10 +29,10 @@ export default function PublicationsPage() {
                   href={publication.link}
                   target="_blank"
                   rel="noreferrer"
-                  className="font-medium text-foreground transition-colors hover:text-accent"
+                  className="font-medium text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground"
                 >
                   {publication.title}
-                  <ArrowUpRight size={14} className="ml-1 inline align-baseline" />
+                  <ExternalLink size={13} className="ml-1.5 inline align-baseline text-muted" />
                 </a>
               ) : (
                 <h2 className="font-medium text-foreground">{publication.title}</h2>
