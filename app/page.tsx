@@ -73,8 +73,8 @@ export default function Home() {
         <Image
           src="/aryaman.jpg"
           alt={siteConfig.name}
-          width={432}
-          height={551}
+          width={1206}
+          height={1539}
           sizes="144px"
           preload
           className="h-28 w-28 shrink-0 rounded-2xl border border-border object-cover object-[55%_28%] sm:h-36 sm:w-36"
