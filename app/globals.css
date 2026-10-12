@@ -106,6 +106,11 @@ body {
   --tw-prose-td-borders: var(--border-color);
 }
 
+/* Keeps anchored headings clear of the sticky reading header. */
+.prose :is(h2, h3) {
+  scroll-margin-top: 4.5rem;
+}
+
 .prose blockquote p::before,
 .prose blockquote p::after {
   content: none;
