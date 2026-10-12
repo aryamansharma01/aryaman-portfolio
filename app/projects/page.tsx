@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ExternalLink } from "lucide-react";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { projects } from "@/data/projects";
 
@@ -29,21 +30,32 @@ export default function ProjectsPage() {
                 {String(index + 1).padStart(3, "0")}
               </p>
               <div>
-                <h2 className="font-serif text-xl font-medium text-foreground">{project.title}</h2>
+                <h2 className="font-serif text-xl font-medium text-foreground">
+                  {project.link ? (
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground"
+                    >
+                      {project.title}
+                      <ExternalLink
+                        size={13}
+                        className="ml-1.5 inline align-baseline text-muted"
+                      />
+                    </a>
+                  ) : (
+                    project.title
+                  )}
+                </h2>
                 {project.stack.length > 0 && (
-                  <p className="mt-1 font-mono text-xs text-muted">{project.stack.join(" · ")}</p>
+                  <p className="mt-1 font-mono text-xs text-muted">
+                    {project.stack.join(" · ")}
+                  </p>
                 )}
-                <p className="mt-2 text-sm leading-relaxed text-muted">{project.description}</p>
-                {project.link && (
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="link-underline mt-3 inline-block pb-0.5 text-sm text-accent"
-                  >
-                    source ↗
-                  </a>
-                )}
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  {project.description}
+                </p>
               </div>
             </li>
           ))}
