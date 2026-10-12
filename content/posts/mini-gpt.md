@@ -8,6 +8,8 @@ Let's talk about code.
 
 I recently had the opportunity (read: homework) to code up a GPT-style architecture from scratch (minGPT, with a few modern upgrades). While the deadline was breathing down my neck I had a fun experience nonetheless. It gave me a bird's eye view of the basics of building a transformer from scratch, training with custom data and then visualising the results first-hand. Let's get into it.
 
+Code can be found [here](https://github.com/aryamansharma01/minigpt/tree/main).
+
 ![GPT-623 architecture with the four changes labelled](/images/blog/mini-gpt/gpt623_architecture.png)
 
 Note: there are four architectural changes that distinguish this configuration (called GPT-623) from the gpt2 configuration in this codebase.
