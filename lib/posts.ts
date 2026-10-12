@@ -6,11 +6,14 @@ import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkRehype from "remark-rehype";
+import rehypeRaw from "rehype-raw";
 import rehypeKatex from "rehype-katex";
 import rehypeHighlight from "rehype-highlight";
 import rehypeStringify from "rehype-stringify";
+import sharp from "sharp";
 
 const postsDirectory = path.join(process.cwd(), "content", "posts");
+const publicDirectory = path.join(process.cwd(), "public");
 
 export interface PostMeta {
   slug: string;
@@ -99,6 +102,75 @@ function rehypeVideo() {
   return visit;
 }
 
+type MediaBackground = "light" | "dark";
+
+// Reports whether a local image sits on a flat white or flat near-black canvas, by sampling
+// just inside its edges. Photos and anything else return null and are left untouched.
+async function detectBackground(src: string): Promise<MediaBackground | null> {
+  const file = path.join(
+    publicDirectory,
+    decodeURIComponent(src.split(/[?#]/)[0]),
+  );
+  if (
+    !src.startsWith("/") ||
+    !file.startsWith(publicDirectory) ||
+    !fs.existsSync(file)
+  ) {
+    return null;
+  }
+
+  try {
+    const { data, info } = await sharp(file)
+      .ensureAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true });
+    const { width, height } = info;
+    const inset = 3;
+    const points = [
+      [width >> 1, inset],
+      [width >> 1, height - 1 - inset],
+      [inset, height >> 1],
+      [width - 1 - inset, height >> 1],
+    ];
+    const samples = points.map(([x, y]) => {
+      const offset = (y * width + x) * 4;
+      return [...data.subarray(offset, offset + 4)];
+    });
+    const opaque = samples.every((pixel) => pixel[3] > 250);
+    if (opaque && samples.every(([r, g, b]) => Math.min(r, g, b) >= 245))
+      return "light";
+    if (opaque && samples.every(([r, g, b]) => Math.max(r, g, b) <= 40))
+      return "dark";
+  } catch {
+    // Unreadable or unsupported image: leave it as is.
+  }
+  return null;
+}
+
+// Tags diagrams and videos with data-bg so CSS can blend their canvas into the page
+// background in either theme (see `.prose [data-bg]` in globals.css).
+function rehypeMediaBackground() {
+  return async (tree: HtmlNode) => {
+    const pending: Promise<void>[] = [];
+    const tag = (node: HtmlNode, src: unknown) => {
+      if (typeof src !== "string") return;
+      pending.push(
+        detectBackground(src).then((background) => {
+          if (background)
+            node.properties = { ...node.properties, dataBg: background };
+        }),
+      );
+    };
+    const visit = (node: HtmlNode) => {
+      if (node.tagName === "img") tag(node, node.properties?.src);
+      if (node.tagName === "video") tag(node, node.properties?.poster);
+      node.children?.forEach(visit);
+    };
+    visit(tree);
+    await Promise.all(pending);
+  };
+}
+
 function listMarkdownFiles(): string[] {
   if (!fs.existsSync(postsDirectory)) return [];
   return fs.readdirSync(postsDirectory).filter((file) => file.endsWith(".md"));
@@ -151,9 +223,12 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     .use(remarkParse)
     .use(remarkGfm)
     .use(remarkMath)
-    .use(remarkRehype)
+    // Posts are first-party, so raw HTML (video, sized images) is kept and parsed into the tree.
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeRaw)
     .use(rehypeHeadings(headings))
     .use(rehypeVideo)
+    .use(rehypeMediaBackground)
     .use(rehypeKatex)
     .use(rehypeHighlight)
     .use(rehypeStringify)

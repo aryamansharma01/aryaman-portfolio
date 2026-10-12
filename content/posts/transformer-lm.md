@@ -1,5 +1,5 @@
 ---
-title: "Transformer language model"
+title: "Transformer language model, part 2"
 date: "2026-10-10"
 excerpt: "Self-attention, multi-head attention, the pieces of a Transformer layer, causal masking, and KV caching."
 ---

@@ -1,7 +1,7 @@
 ---
 title: "Grad school is scary!"
 date: "2026-08-26"
-excerpt: "That’s what I thought until I became a part of the atmosphere 2 weeks ago."
+excerpt: "My thoughts on joining CMU."
 ---
 
 That’s what I thought until I became a part of the atmosphere 2 weeks ago. The past few weeks have been stupidly good to me. So much so that I feel like I’ve grown as an individual more in the last couple days than I did in the last few years of my life.

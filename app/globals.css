@@ -116,6 +116,26 @@ body {
   scroll-margin-top: 4.5rem;
 }
 
+/* Diagrams and embeds drawn on a flat canvas (tagged data-bg at build time) blend into the
+   page: the canvas takes the page background, and is flipped when it opposes the theme. */
+.prose [data-bg="light"] {
+  mix-blend-mode: multiply;
+}
+
+[data-theme="dark"] .prose [data-bg="light"] {
+  filter: invert(1) hue-rotate(180deg);
+  mix-blend-mode: screen;
+}
+
+[data-theme="light"] .prose [data-bg="dark"] {
+  filter: invert(1) hue-rotate(180deg) brightness(1.1);
+  mix-blend-mode: multiply;
+}
+
+[data-theme="dark"] .prose [data-bg="dark"] {
+  mix-blend-mode: lighten;
+}
+
 .prose blockquote p::before,
 .prose blockquote p::after {
   content: none;
@@ -129,6 +149,29 @@ body {
 
 .prose pre {
   border: 1px solid var(--border-color);
+}
+
+/* Long lines wrap instead of scrolling sideways. */
+.prose pre code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Link to the source of the code block above it. */
+.prose .code-source {
+  margin-top: -1.1em;
+  text-align: right;
+  font-family: var(--font-geist-mono);
+  font-size: 0.75rem;
+}
+
+.prose .code-source a {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.prose .code-source a:hover {
+  color: var(--accent);
 }
 
 .hljs-comment,
