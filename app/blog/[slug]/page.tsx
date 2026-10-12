@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { PostNavCompact, PostNavFooter } from "@/components/blog/PostNav";
 import { ReadingProgress } from "@/components/blog/ReadingProgress";
+import { SideContents } from "@/components/blog/SideContents";
 import { TableOfContents } from "@/components/blog/TableOfContents";
 import { getAdjacentPosts, getAllPostSlugs, getPostBySlug } from "@/lib/posts";
 import "katex/dist/katex.min.css";
@@ -41,6 +42,7 @@ export default async function BlogPostPage({
         minutes={post.readingMinutes}
         targetId="post-body"
       />
+      <SideContents headings={post.headings} targetId="post-body" />
       <div className="mb-8 flex items-center justify-between gap-4">
         <Link
           href="/blog"
