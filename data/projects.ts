@@ -8,6 +8,14 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: "minigpt",
+    title: "MiniGPT",
+    description:
+      "A compact decoder-only GPT written from scratch in PyTorch, trained at the character level on Tiny Shakespeare. Built on the minGPT architecture with modern upgrades: rotary position embeddings, grouped-query attention, RMSNorm with QK-Norm, and a SwiGLU feed-forward network. I wrote up the build and the training results on the blog.",
+    stack: ["Python", "PyTorch", "einops"],
+    link: "https://github.com/aryamansharma01/minigpt",
+  },
+  {
     id: "smartpilot",
     title: "SmartPilot",
     description:
