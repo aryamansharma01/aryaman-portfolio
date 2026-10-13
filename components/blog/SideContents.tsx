@@ -17,6 +17,7 @@ const ACTIVE_OFFSET = 96;
 const subscribeNoop = () => () => {};
 
 // Contents list pinned left of the post on wide screens, highlighting the current section.
+// Its scrollbar is hidden: the enlarged current entry would otherwise trigger one.
 export function SideContents({ headings, targetId }: SideContentsProps) {
   // Rendered into <body>: the page's fade-up wrapper is transformed, which would trap `fixed`.
   const container = useSyncExternalStore(
@@ -66,7 +67,7 @@ export function SideContents({ headings, targetId }: SideContentsProps) {
       aria-label="Table of contents"
       aria-hidden={!visible}
       className={cn(
-        "fixed top-28 right-[calc(50%+23rem)] hidden max-h-[calc(100vh-10rem)] w-52 overflow-y-auto transition-[opacity,visibility] duration-300 xl:block",
+        "fixed top-28 right-[calc(50%+23rem)] hidden max-h-[calc(100vh-10rem)] w-52 [scrollbar-width:none] overflow-x-hidden overflow-y-auto pb-1 transition-[opacity,visibility] [&::-webkit-scrollbar]:hidden duration-300 xl:block",
         visible ? "visible opacity-100" : "invisible opacity-0",
       )}
     >

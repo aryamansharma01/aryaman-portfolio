@@ -81,7 +81,7 @@ export default function Home() {
         />
       </div>
 
-      <div className="mt-10 space-y-5 font-serif text-lg leading-relaxed text-foreground">
+      <div className="mt-10 space-y-5 font-serif text-[18px] leading-relaxed text-foreground">
         {about.paragraphs.map((paragraph) => (
           <p key={paragraph}>{linkify(paragraph)}</p>
         ))}

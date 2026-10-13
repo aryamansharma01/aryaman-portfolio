@@ -149,6 +149,8 @@ body {
 
 .prose pre {
   border: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  line-height: 1.6;
 }
 
 /* Long lines wrap instead of scrolling sideways. */
